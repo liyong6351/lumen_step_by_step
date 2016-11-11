@@ -58,14 +58,16 @@ $app->singleton(
 | route or middleware that'll be assigned to some specific routes.
 |
 */
+$app->middleware([
+    //App\Http\Middleware\OldMiddleware::class
+    $app->singleton(App\Http\Middleware\OldMiddleware::class),
+]);
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
-
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+    'old' => App\Http\Middleware\OldMiddleware::class,
+    'role' => App\Http\Middleware\RoleMiddleware::class,
+]);
 
 /*
 |--------------------------------------------------------------------------

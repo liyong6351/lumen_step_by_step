@@ -15,12 +15,20 @@ $app->get('/version', function () use ($app) {
     return $app->version();
 });
 
+$app->get('/version', function () use ($app) {
+    return $app->version();
+});
+
 /**
  * This is default response
  */
 $app->get('/', function () use ($app) {
     return 'Welcome,I do not know you name';
 });
+
+$app->get('/home', ['as' => 'home',function (){
+    return 'Welcome home';
+}]);
 
 $app->get('/{id}', function ($id) use ($app){
     return 'Welcome '.$id;
@@ -44,12 +52,10 @@ $app->get('profile', ['as' => '123', function () {
     return 'Named Router';
 }]);
 
-$app->group(['middleware' => 'auth'], function () use ($app) {
-    $app->get('/', function ()    {
-        // Uses Auth Middleware
-    });
+$app->get('admin/profile',['middleware'=>'old',function(){
+    return 'admin/profile';
+}]);
 
-    $app->get('user/profile', function () {
-        // Uses Auth Middleware
-    });
-});
+$app->get('admin/role',['middleware'=>'role:100',function(){
+    return 'admin/role';
+}]);
