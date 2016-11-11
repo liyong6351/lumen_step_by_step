@@ -38,6 +38,7 @@ $app->group(['middleware' => 'auth'], function () use ($app) {
         // Uses Auth Middleware
     });
 });
+
 命名空间
 ==
 
