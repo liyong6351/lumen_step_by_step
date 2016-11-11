@@ -1,21 +1,45 @@
-# Lumen PHP Framework
+## Learn lumen from official website step by step
+## 本项目基于Lumen (5.3.2) (Laravel Components 5.3.*)
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+## 1 创建项目
+运行lumen new blog
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## 2 路由
+路由信息都保存在routes/web.php文件中
+基本路由(不带参数版本):
+$app->get('foo', function () {
+    return 'Hello World';
+});
+基本路由(带参数版本)
+$app->get('user/{id}', function ($id) {
+    return 'User '.$id;
+});
+Lumen支持的Http方法包括get post put patch delete options
 
-## Official Documentation
+命名路由:其实简单理解就是给路由起了一个名字,使得他们可以在其他路由中使用,比如:
+$app->get('profile', ['as' => 'profileAlias', function () {
+    //
+}]);
+就是将profile路由起了一个别名为profileAlias,那么其他路由需要跳转到这个路由可以使用别名进行跳转
+$app->get('/named',function () use ($app){
+    // Generating URLs...
+    $url = route('profileAlias');
+    // Generating Redirects...
+    return redirect()->route('123');
+});
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+路由分组:简单理解,就是将路由的公用部分提出来形成公用信息,常用的场景包括中间件 命名空间 
+中间件:比如如果需要在访问接口的时候验证是否有权限,那么就可以使用middleware路由分组,中间件按照定义的数组顺序依次执行
+$app->group(['middleware' => 'auth'], function () use ($app) {
+    $app->get('/', function ()    {
+        // Uses Auth Middleware
+    });
+    $app->get('user/profile', function () {
+        // Uses Auth Middleware
+    });
+});
+命名空间
+==
 
-## Security Vulnerabilities
+路由前缀
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
