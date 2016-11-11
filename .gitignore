@@ -1,0 +1,11 @@
+.idea
+/vendor
+/.idea
+Homestead.json
+Homestead.yaml
+.env
+/database/*.bak
+composer.lock
+public/storage
+public/images
+
