@@ -57,26 +57,24 @@ $app->group(['middleware' => 'auth'], function () use ($app) {
 * 执行Middleware的顺序
 Middleware是在请求之前执行还是在请求之后执行取决于Middle自身的结构
   下面的结构是请求之前执行(执行逻辑之后才执行$next)  
-class OldMiddleware
-{
-    public function handle($request, Closure $next)
-    {
-        if($request->input('age') <= 200){
-            return redirect('home');
-        }
-        return $next($request);
-    }
+class OldMiddleware  
+{  
+    public function handle($request, Closure $next){  
+        if($request->input('age') <= 200){  
+            return redirect('home');  
+        }  
+        return $next($request);  
+    }  
+}  
+下面的结构是请求之后执行  
+class OldMiddleware  
+{  
+    public function handle($request, Closure $next){  
+        $response = $next($request);  
+        //Perform some business  
+        return $response;  
+    }  
 }
-  下面的结构是请求之后执行
-  class OldMiddleware
-  {
-      public function handle($request, Closure $next)
-      {
-          $response = $next($request);
-          //Perform some business
-          return $response;
-      }
-  }
 
 ## 注册Middleware
 * 全局Middleware
