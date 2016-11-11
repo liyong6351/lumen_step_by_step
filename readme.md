@@ -55,9 +55,9 @@ $app->group(['middleware' => 'auth'], function () use ($app) {
 你可以简单的拷贝app/Http/Middleware中的ExampleMiddleware类然后写自己的逻辑
 
 * 执行Middleware的顺序
-Middleware是在请求之前执行还是在请求之后执行取决于Middle自身的结构
-  下面的结构是请求之前执行(执行逻辑之后才执行$next)  
-class OldMiddleware  
+Middleware是在请求之前执行还是在请求之后执行取决于Middle自身的结构  
+下面的结构是请求之前执行(执行逻辑之后才执行$next)  
+`class OldMiddleware  
 {  
     public function handle($request, Closure $next){  
         if($request->input('age') <= 200){  
@@ -65,9 +65,9 @@ class OldMiddleware
         }  
         return $next($request);  
     }  
-}  
+}`  
 下面的结构是请求之后执行  
-class OldMiddleware  
+    class OldMiddleware  
 {  
     public function handle($request, Closure $next){  
         $response = $next($request);  
