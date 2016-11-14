@@ -60,7 +60,7 @@ $app->singleton(
 */
 $app->middleware([
     //App\Http\Middleware\OldMiddleware::class
-    $app->singleton(App\Http\Middleware\OldMiddleware::class),
+    //$app->singleton(App\Http\Middleware\OldMiddleware::class),
 ]);
 
 $app->routeMiddleware([

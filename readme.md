@@ -116,3 +116,100 @@ class SessionMiddleware
 　　　　//do somebusiness  
 　　}  
 }  
+### Controllers
+## 简介
+Controller的作用就是存储业务逻辑。也可以将业务逻辑写入router中，但是如果太复杂不鼓励这样的情况  
+Controller可以将相关的HTTP请求处理分组到某一个类中。  
+Controller存储在app/Http/Controllers目录中
+## 基础Controller
+* 所有的Controller都应该继承Lumen提供的base controller,如下例:  
+class UserController extends Controller  
+{  
+　　public function show($id){  
+　　　　return User::findOrFail($id);  
+　　}  
+}  
+配置router的时候如下例:  
+$app->get('user/{id}', 'UserController@show');  
+* 命名Controller
+## Controller中间件
+Middleware可以写在router中，但是有一种更方便的是写在controller的构造方法中。
+
+## 依赖注入 和 控制器
+Lumen的服务容器用于解决Controller所有的依赖关系。所以只需要在Controller的构造方法中定义即可  
+* 方法注入
+除了构造器注入之外，还可以使用方法注入  
+
+### Requests
+## 获取到Request
+如果需要在一次Http请求中保持同一个实例，那么可以将Request声明注入即可。
+## 基础的Request信息
+Illuminate\Http\Request从Symfony\Component\HttpFoundation\Request中继承而来，包含了众多的信息
+# 获取URI
+获取到请求的URL $uri = $request->path();  
+is方法可以对请求的uri进行匹配，支持通配符 if($request->is('admin/*')){}  
+url或fullUrl方法可以获取到请求全路径 $url = $request->url()  $url=$request->fullUrl();  
+* 获取到Request的方法
+$method = $request->method();  
+$isMethod = $request -> isMethod('post');
+* PSR-7 请求
+PSR-7标准规定了HTTP消息的家口，包括请求和响应。如果你需要使用PSR-7，那么需要安装一些库文件。Laravel使用Symfony HTTP 
+Message将典型的Laravel请求和响应转化为PSR-7兼容实现。需要运行如下命令:  
+composer require symfony/psr-http-message-bridge  
+composer require zendframework/zend-diactoros  
+一旦你安装了这些库，你就可以声明式的将请求转化为PSR-7类型的了。
+use Psr\Http\Message\ServerRequestInterface;  
+$app->get('/', function (ServerRequestInterface $request) {  
+　　//  
+});  
+## 获取输入参数
+* 获取输入值
+$name = $request->input("name","Sally");  
+如果使用的是数组形式的input，那么可以使用.操作符进行操作  
+$name = $request->input('products.0.name');  
+$name = $request->input('products.*.name')  
+* 检测一个输入参数是否存在
+$request->has('name')  
+* 获取到所有的输入值
+$input = $request->all();
+* 检索输入数据的一部分
+可以使用 only 或 except 进行操作。输入参数可以是单个数组或者动态列表  
+$input = $request->only(['username','password'])  
+$input = $request->only('username','password')  
+$input = $request->except(['credit_card']);
+$input = $request->except('credit_card');  
+## 文件
+* 获取上传的文件 $file = $request->file('photo');  
+* 检测是否存在 $isExist = $request->hasFile('photo')  
+* 检测是否成功上传:$request->file('photo')->isValid();  
+* 移动上传的文件：$request->file('photo')->move($destinationPath)  $request->file('photo')->move($destinationPath,$fileName) 
+* 其他的上传文件: 参见 http://api.symfony.com/3.0/Symfony/Component/HttpFoundation/File/UploadedFile.html
+
+### response
+## Basic responses
+* 最简单的就是返回一个字符串 $app->get('/',function(){ return 'Hello world' })
+* 返回对象 $app->get('home',function(){ return ( new Response($content,$status))->header('Content-type',$value) });  
+当然，你也可以response helper  
+$app->get('home',function(){ return response($content,$status)->header('Content->type',$value) })  
+如果需要了解所有的Response相关的方法，请查阅 https://laravel.com/api/master/Illuminate/Http/Response.html
+* 将Header附加到Response
+return response($content)->header('Content-Type',$type)->header('X-Header-One','Header Value')->header('X-Header-Two','Header Value');  
+我们推介使用withHeaders方法将一个数组组装起来操作  
+return response($content)->withHeaders(['Content-type'=>$type,'X-Header-One'=>'Header Value','X-Header-Two'=>'Header Value'])
+## 其他的Response Types
+* 返回Json 
+return response()->json(['name'=>'liyong','state'=>'CHN']);  
+你也可以定制HTTP Code:return response()->json(['error'=>'unauthorized'],401,['X-Header-One','Header Value']);
+如果你使用了jsonp response,你需要设置一个setCallBack回调  
+return response()->json(['name' => 'Abigail', 'state' => 'CA'])->setCallback($request->input('callback'));
+* 文件下载
+return response()->download($pathToFile);  
+return response()->download($pathToFile, $name, $headers);
+
+## 重定向
+Redirect responses是Illuminate\Http\RedirectResponse的实例，可以重定向到另外一个URL。重定向可以有多种实现:  
+$app->get('dashboard', function () { return redirect('home/dashboard'); });  
+重定向到另一个命名的routes  
+return redirect()->route('login', ['id' => 1]);  
+如果你的参数是一个对象，这个对象拥有id属性，调用方式可以直接传递object，id可以自动被解析出来  
+return redirect()->route('profile',[$user])  

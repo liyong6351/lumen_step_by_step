@@ -15,10 +15,6 @@ $app->get('/version', function () use ($app) {
     return $app->version();
 });
 
-$app->get('/version', function () use ($app) {
-    return $app->version();
-});
-
 /**
  * This is default response
  */
@@ -38,19 +34,6 @@ $app->get('/posts/{post}/comments/{comment}', function ($post,$comment) use ($ap
     return 'post is '.$post.', comment is '.$comment;
 });
 
-$app->get('/named',function () use ($app){
-    // Generating URLs...
-    $url = route('123');
-
-// Generating Redirects...
-    return redirect()->route('123');
-});
-
-//Named Router
-$app->get('profile', ['as' => '123', function () {
-
-    return 'Named Router';
-}]);
 
 $app->get('admin/profile',['middleware'=>'old',function(){
     return 'admin/profile';
@@ -59,3 +42,5 @@ $app->get('admin/profile',['middleware'=>'old',function(){
 $app->get('admin/role',['middleware'=>'role:100',function(){
     return 'admin/role';
 }]);
+
+$app->get('user/{id}', 'UserController@show');
