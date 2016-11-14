@@ -34,7 +34,6 @@ $app->get('/posts/{post}/comments/{comment}', function ($post,$comment) use ($ap
     return 'post is '.$post.', comment is '.$comment;
 });
 
-
 $app->get('admin/profile',['middleware'=>'old',function(){
     return 'admin/profile';
 }]);
