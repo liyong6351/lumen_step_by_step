@@ -6,20 +6,19 @@
 
 ## 2. 路由  
 路由信息都保存在routes/web.php文件中  
-基本路由(不带参数版本):  
+* 基本路由(不带参数版本):  
 $app->get('foo', function () {  
 　　return 'Hello World';  
 });
 * 基本路由(带参数版本)
 $app->get('user/{id}', function ($id) {  
 　　return 'User '.$id;  
-});
+});  
 Lumen支持的Http方法包括get post put patch delete options  
-
 * 命名路由:其实简单理解就是给路由起了一个名字,使得他们可以在其他路由中使用,比如:
 $app->get('profile', ['as' => 'profileAlias', function () {  
-　　//
-}]);
+　　//  
+}]);  
 就是将profile路由起了一个别名为profileAlias,那么其他路由需要跳转到这个路由可以使用别名进行跳转
 $app->get('/named',function () use ($app){  
 　　// Generating URLs...  
@@ -27,7 +26,6 @@ $app->get('/named',function () use ($app){
 　　// Generating Redirects...  
 　　return redirect()->route('123');  
 });
-
 * 路由分组:简单理解,就是将路由的公用部分提出来形成公用信息,常用的场景包括中间件 命名空间  
 中间件:比如如果需要在访问接口的时候验证是否有权限,那么就可以使用middleware路由分组,中间件按照定义的数组顺序依次执行
 $app->group(['middleware' => 'auth'], function () use ($app) {  
@@ -38,10 +36,7 @@ $app->group(['middleware' => 'auth'], function () use ($app) {
 　　　　// Uses Auth Middleware  
 　　});  
 });  
-
-命名空间  
-
-
+* 命名空间  
 * 路由前缀  
 ## 中间件MiddleWare
 1. Middleware简单说就是过滤器,比如:你可以添加Authenticated过滤器,当请求到达的时候会校验是否认证过了,没有认证过的跳转到认证页面,
