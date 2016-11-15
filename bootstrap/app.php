@@ -81,7 +81,8 @@ $app->routeMiddleware([
 */
 
 // $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+//This Provider is about Auth
+$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
@@ -98,5 +99,10 @@ $app->routeMiddleware([
 $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../routes/web.php';
 });
+
+//$app->configureMonologUsing(function($monolog) {
+//    $monolog->pushHandler(...);
+//    return $monolog;
+//});
 
 return $app;

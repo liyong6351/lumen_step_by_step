@@ -33,6 +33,13 @@ class AuthServiceProvider extends ServiceProvider
         $this->app['auth']->viaRequest('api', function ($request) {
             if ($request->input('api_token')) {
                 return User::where('api_token', $request->input('api_token'))->first();
+            }else{
+                try{
+                    $a = 1/0;
+                }
+                catch (JWTException $e) {
+                    throw new UnauthorizedHttpException('jwt-auth', $e->getMessage(), $e, $e->getCode());
+                }
             }
         });
     }
